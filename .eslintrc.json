@@ -1,0 +1,51 @@
+{
+  "root": true,
+  "env": { "browser": true, "es2020": true },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "ignorePatterns": ["dist"],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["react-refresh", "prettier", "eslint-plugin-import-helpers"],
+  "rules": {
+    "prettier/prettier": [
+      "error",
+      {
+        "singleQuote": false,
+        "trailingComma": "all",
+        "arrowParens": "always",
+        "endOfLine": "auto",
+        "bracketSpacing": true,
+        "bracketSameLine": false,
+        "printWidth": 80,
+        "proseWrap": "preserve",
+        "quoteProps": "as-needed",
+        "semi": false,
+        "tabWidth": 2,
+        "useTabs": false
+      }
+    ],
+    "import-helpers/order-imports": [
+      "warn",
+      {
+        "newlinesBetween": "always",
+        "groups": [
+          "/^node:*/",
+          "module",
+          [
+            "parent",
+            "sibling",
+            "index"
+          ]
+        ],
+        "alphabetize": {
+          "order": "asc",
+          "ignoreCase": true
+        }
+      }
+    ]
+  }
+}
