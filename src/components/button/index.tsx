@@ -1,19 +1,18 @@
-import { ComponentProps } from "react"
+import { ComponentProps, forwardRef } from "react"
 
-import { Container } from "./styes"
+import { Container } from "./styles"
 
 type ButtonProps = ComponentProps<"button"> & {
   variant?: "default" | "outline"
 }
 
-export function Button({
-  children,
-  variant = "default",
-  ...props
-}: ButtonProps) {
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function (
+  { children, variant = "default", ...props },
+  ref,
+) {
   return (
-    <Container {...props} $variant={variant}>
+    <Container {...props} ref={ref} $variant={variant}>
       {children}
     </Container>
   )
-}
+})
