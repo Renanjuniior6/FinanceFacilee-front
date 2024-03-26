@@ -3,6 +3,7 @@ import { InputMask } from "@react-input/mask"
 import { Button } from "../../components/button"
 import { ButtonIcon } from "../../components/button-icon"
 import { Card } from "../../components/card"
+import { Dialog } from "../../components/dialog"
 import { Input } from "../../components/input"
 import { Logo } from "../../components/logo"
 import { Title } from "../../components/title"
@@ -19,6 +20,7 @@ import {
   Main,
   SearchTransaction,
   Section,
+  TransactionsGroup,
 } from "./styles"
 
 export function Home() {
@@ -27,7 +29,7 @@ export function Home() {
       <Header>
         <Logo />
         <div>
-          <Button>Nova transação</Button>
+          <Dialog trigger={<Button>Nova transação</Button>}>Olá</Dialog>
           <Button>Nova categoria</Button>
         </div>
       </Header>
@@ -97,28 +99,30 @@ export function Home() {
               <Input variant="black" placeholder="Procurar transação..." />
               <ButtonIcon />
             </SearchTransaction>
-            <Transaction
-              id={1}
-              amount={20000}
-              date="22/03/2024"
-              category={{ title: "ALIMENTAÇÃO", color: "#ff33bb" }}
-              title="Mercado"
-            />
-            <Transaction
-              id={1}
-              amount={20000}
-              date="22/03/2024"
-              category={{ title: "ALIMENTAÇÃO", color: "#ff33bb" }}
-              title="Mercado"
-            />
-            <Transaction
-              id={1}
-              amount={20000}
-              date="22/03/2024"
-              category={{ title: "ALIMENTAÇÃO", color: "#ff33bb" }}
-              title="Mercado"
-            />
           </header>
+          <TransactionsGroup>
+            <Transaction
+              id={1}
+              amount={20000}
+              date="22/03/2024"
+              category={{ title: "ALIMENTAÇÃO", color: "#ff33bb" }}
+              title="Mercado"
+            />
+            <Transaction
+              id={1}
+              amount={20000}
+              date="22/03/2024"
+              category={{ title: "ALIMENTAÇÃO", color: "#ff33bb" }}
+              title="Mercado"
+            />
+            <Transaction
+              id={1}
+              amount={20000}
+              date="22/03/2024"
+              category={{ title: "ALIMENTAÇÃO", color: "#ff33bb" }}
+              title="Mercado"
+            />
+          </TransactionsGroup>
         </Aside>
       </Main>
     </>
