@@ -1,9 +1,11 @@
 import { InputMask } from "@react-input/mask"
 
-import { Button } from "../../components/button"
 import { ButtonIcon } from "../../components/button-icon"
 import { Card } from "../../components/card"
-import { Dialog } from "../../components/dialog"
+import { CategoriesPieChart } from "../../components/categories-pie-chart"
+import { CreateDialogCategory } from "../../components/create-category-dialog"
+import { CreateTransactionDialog } from "../../components/create-transaction-dialog"
+import { FinancialEvolutionBarChart } from "../../components/financial-evolution-bar-chart"
 import { Input } from "../../components/input"
 import { Logo } from "../../components/logo"
 import { Title } from "../../components/title"
@@ -29,8 +31,8 @@ export function Home() {
       <Header>
         <Logo />
         <div>
-          <Dialog trigger={<Button>Nova transação</Button>}>Olá</Dialog>
-          <Button>Nova categoria</Button>
+          <CreateTransactionDialog />
+          <CreateDialogCategory />
         </div>
       </Header>
 
@@ -68,7 +70,9 @@ export function Home() {
               title="Gastos"
               subtitle="Despesas por categoria no período"
             />
-            <ChartContent></ChartContent>
+            <ChartContent>
+              <CategoriesPieChart />
+            </ChartContent>
           </ChartContainer>
           <ChartContainer>
             <header>
@@ -89,7 +93,9 @@ export function Home() {
                 <ButtonIcon />
               </ChartAction>
             </header>
-            <ChartContent></ChartContent>
+            <ChartContent>
+              <FinancialEvolutionBarChart />
+            </ChartContent>
           </ChartContainer>
         </Section>
         <Aside>
