@@ -15,6 +15,11 @@ export const Header = styled.header`
     gap: 0.5rem;
   }
 `
+export const H1 = styled.h1`
+  font-size: 1.3rem;
+  color: ${theme.colors.primary};
+`
+
 export const Main = styled.main`
   display: flex;
   gap: 0.75rem;
