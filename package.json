@@ -16,10 +16,12 @@
     "@radix-ui/react-dialog": "^1.0.5",
     "@react-input/mask": "^1.0.22",
     "@react-input/number-format": "^1.0.23",
+    "axios": "^1.6.8",
     "dayjs": "^1.11.10",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "styled-components": "^6.1.8"
+    "styled-components": "^6.1.8",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/react": "^18.2.64",

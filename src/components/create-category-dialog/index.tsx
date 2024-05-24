@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react"
 
+import { useFetchAPI } from "../../hooks/useFetchAPI"
 import { Button } from "../button"
 import { Dialog } from "../dialog"
 import { Input } from "../input"
@@ -8,6 +9,8 @@ import { Container } from "./styles"
 
 export function CreateDialogCategory() {
   const [open, setOpen] = useState(false)
+
+  const { createCategory } = useFetchAPI()
 
   const handleClose = useCallback(() => {
     setOpen(false)
