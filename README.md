@@ -27,6 +27,10 @@
 - React-input-mask
 - Radix-UI
 - Nivo
+  
+## 💻 Back end 
+- Node
+- MongoDB
 
 ## 🤔 Próximos passos
 - Integração com o back-end
