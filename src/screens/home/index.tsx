@@ -1,17 +1,32 @@
+import { zodResolver } from "@hookform/resolvers/zod"
+import { X } from "@phosphor-icons/react"
 import { InputMask } from "@react-input/mask"
+import dayjs from "dayjs"
+import { useCallback, useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
 
 import { ButtonIcon } from "../../components/button-icon"
 import { Card } from "../../components/card"
-import { CategoriesPieChart } from "../../components/categories-pie-chart"
+import {
+  CategoriesPieChart,
+  CategoryProps,
+} from "../../components/categories-pie-chart"
 import { CreateDialogCategory } from "../../components/create-category-dialog"
 import { CreateTransactionDialog } from "../../components/create-transaction-dialog"
 import { FinancialEvolutionBarChart } from "../../components/financial-evolution-bar-chart"
 import { Input } from "../../components/input"
 import { Title } from "../../components/title"
 import { Transaction } from "../../components/transaction"
+import { useFetchAPI } from "../../hooks/useFetchAPI"
+import { transactionsFilterSchema } from "../../validators/schemas"
+import {
+  FinancialEvolutionFilterData,
+  TransactionsFilterData,
+} from "../../validators/types"
 import {
   Aside,
   Balance,
+  CategoryBadge,
   ChartAction,
   ChartContainer,
   ChartContent,
@@ -26,6 +41,89 @@ import {
 } from "./styles"
 
 export function Home() {
+  const transactionsFilterForm = useForm<TransactionsFilterData>({
+    defaultValues: {
+      title: "",
+      categoryId: "",
+      beginDate: dayjs().startOf("month").format("DD/MM/YYYY"),
+      endDate: dayjs().endOf("month").format("DD/MM/YYYY"),
+    },
+    resolver: zodResolver(transactionsFilterSchema),
+  })
+
+  const financialEvolutionFilterForm = useForm<FinancialEvolutionFilterData>({
+    defaultValues: {
+      year: dayjs().get("year").toString(),
+    },
+  })
+
+  const {
+    transactions,
+    dashboard,
+    financialEvolution,
+    fetchFinancialEvolution,
+    fetchDashboard,
+    fetchTransactions,
+  } = useFetchAPI()
+
+  useEffect(() => {
+    const { beginDate, endDate } = transactionsFilterForm.getValues()
+
+    fetchDashboard({ beginDate, endDate })
+    fetchTransactions(transactionsFilterForm.getValues())
+    fetchFinancialEvolution(financialEvolutionFilterForm.getValues())
+  }, [
+    fetchTransactions,
+    transactionsFilterForm,
+    fetchDashboard,
+    fetchFinancialEvolution,
+    financialEvolutionFilterForm,
+  ])
+
+  const [selectedCategory, setSelectedCategory] =
+    useState<CategoryProps | null>(null)
+
+  const handleSelectedCategory = useCallback(
+    async ({ color, id, title }: CategoryProps) => {
+      setSelectedCategory({ id, title, color })
+      transactionsFilterForm.setValue("categoryId", id)
+
+      await fetchTransactions(transactionsFilterForm.getValues())
+    },
+    [transactionsFilterForm, fetchTransactions],
+  )
+
+  const handleDeselectedCategory = useCallback(async () => {
+    setSelectedCategory(null)
+    transactionsFilterForm.setValue("categoryId", "")
+
+    await fetchTransactions(transactionsFilterForm.getValues())
+  }, [transactionsFilterForm, fetchTransactions])
+
+  const onSubmitTransactions = useCallback(
+    async (data: TransactionsFilterData) => {
+      await fetchTransactions(data)
+    },
+    [fetchTransactions],
+  )
+
+  const onSubmitDashboard = useCallback(
+    async (data: TransactionsFilterData) => {
+      const { beginDate, endDate } = data
+
+      await fetchDashboard({ beginDate, endDate })
+      await fetchTransactions(data)
+    },
+    [fetchDashboard, fetchTransactions],
+  )
+
+  const onSubmitFinancialEvolution = useCallback(
+    async (data: FinancialEvolutionFilterData) => {
+      await fetchFinancialEvolution(data)
+    },
+    [fetchFinancialEvolution],
+  )
+
   return (
     <>
       <Header>
@@ -48,6 +146,10 @@ export function Home() {
                 variant="dark"
                 label="Início"
                 placeholder="dd/mm/aaaa"
+                // error={
+                //   transactionsFilterForm.formState.errors.beginDate?.message
+                // }
+                {...transactionsFilterForm.register("beginDate")}
               />
               <InputMask
                 component={Input}
@@ -56,22 +158,48 @@ export function Home() {
                 variant="dark"
                 label="Fim"
                 placeholder="dd/mm/aaaa"
+                // error={transactionsFilterForm.formState.errors.endDate?.message}
+                {...transactionsFilterForm.register("endDate")}
               />
-              <ButtonIcon />
+              <ButtonIcon
+                onClick={transactionsFilterForm.handleSubmit(onSubmitDashboard)}
+              />
             </ImportGroup>
           </Filters>
           <Balance>
-            <Card title="Saldo" amount={200000} />
-            <Card title="Receita" amount={1000000} variant="incomes" />
-            <Card title="Gasto" amount={800000} variant="expenses" />
+            <Card title="Saldo" amount={dashboard?.balance?.balance || 0} />
+            <Card
+              title="Receita"
+              amount={dashboard?.balance?.incomes || 0}
+              variant="incomes"
+            />
+            <Card
+              title="Gasto"
+              amount={dashboard?.balance?.expenses * -1 || 0}
+              variant="expenses"
+            />
           </Balance>
           <ChartContainer>
-            <Title
-              title="Gastos"
-              subtitle="Despesas por categoria no período"
-            />
+            <header>
+              <Title
+                title="Gastos"
+                subtitle="Despesas por categoria no período"
+              />
+              {selectedCategory && (
+                <CategoryBadge
+                  $color={selectedCategory.color}
+                  onClick={handleDeselectedCategory}
+                >
+                  <X />
+                  {selectedCategory.title.toUpperCase()}
+                </CategoryBadge>
+              )}
+            </header>
             <ChartContent>
-              <CategoriesPieChart />
+              <CategoriesPieChart
+                expenses={dashboard.expenses}
+                onClick={handleSelectedCategory}
+              />
             </ChartContent>
           </ChartContainer>
           <ChartContainer>
@@ -89,12 +217,19 @@ export function Home() {
                   variant="black"
                   label="Ano"
                   placeholder="aaaa"
+                  {...financialEvolutionFilterForm.register("year")}
                 />
-                <ButtonIcon />
+                <ButtonIcon
+                  onClick={financialEvolutionFilterForm.handleSubmit(
+                    onSubmitFinancialEvolution,
+                  )}
+                />
               </ChartAction>
             </header>
             <ChartContent>
-              <FinancialEvolutionBarChart />
+              <FinancialEvolutionBarChart
+                financialEvolution={financialEvolution}
+              />
             </ChartContent>
           </ChartContainer>
         </Section>
@@ -102,46 +237,36 @@ export function Home() {
           <header>
             <Title title="Transações" subtitle="Receitas e Gastos no período" />
             <SearchTransaction>
-              <Input variant="black" placeholder="Procurar transação..." />
-              <ButtonIcon />
+              <Input
+                variant="black"
+                placeholder="Procurar transação..."
+                {...transactionsFilterForm.register("title")}
+              />
+              <ButtonIcon
+                onClick={transactionsFilterForm.handleSubmit(
+                  onSubmitTransactions,
+                )}
+              />
             </SearchTransaction>
           </header>
           <TransactionsGroup>
-            <Transaction
-              id={1}
-              amount={50000}
-              date="15/01/2024"
-              category={{ title: "ALIMENTAÇÃO", color: "#ff33bb" }}
-              title="Mercado"
-            />
-            <Transaction
-              id={2}
-              amount={6000}
-              date="25/01/2024"
-              category={{ title: "STREAMING", color: "#00ff00" }}
-              title="Netflix"
-            />
-            <Transaction
-              id={3}
-              amount={30000}
-              date="13/02/2024"
-              category={{ title: "COMPRAS", color: "#ff0000" }}
-              title="Shopping"
-            />
-            <Transaction
-              id={4}
-              amount={10000}
-              date="20/02/2024"
-              category={{ title: "COMPRAS", color: "#ff0000" }}
-              title="Shein"
-            />
-            <Transaction
-              id={5}
-              amount={4000}
-              date="27/02/2024"
-              category={{ title: "STREAMING", color: "#00ff00" }}
-              title="Amazon Prime"
-            />
+            {transactions?.length &&
+              transactions?.map((item, index) => (
+                <Transaction
+                  key={item._id}
+                  id={index + 1}
+                  amount={
+                    item.type === "expense" ? item.amount * -1 : item.amount
+                  }
+                  date={dayjs(item.date).add(3, "hours").format("DD/MM/YYYY")}
+                  category={{
+                    title: item.category.title,
+                    color: item.category.color,
+                  }}
+                  title={item.title}
+                  variant={item.type}
+                />
+              ))}
           </TransactionsGroup>
         </Aside>
       </Main>

@@ -2,6 +2,10 @@ import styled from "styled-components"
 
 import { theme } from "../../style/theme"
 
+type CategoryBadgeProps = {
+  $color: string
+}
+
 export const Header = styled.header`
   display: flex;
   align-items: center;
@@ -98,4 +102,24 @@ export const TransactionsGroup = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0 0.75rem;
+`
+export const CategoryBadge = styled.span<CategoryBadgeProps>`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.25rem;
+
+  font-size: 0.625rem;
+  font-weight: 400;
+  border: 1px solid ${(props) => props.$color};
+  color: ${(props) => props.$color};
+  padding: 0.25rem;
+  border-radius: 0.125rem;
+  cursor: pointer;
+
+  svg {
+    fill: ${theme.colors.error};
+    width: 0.875rem;
+    height: 0.875rem;
+  }
 `
