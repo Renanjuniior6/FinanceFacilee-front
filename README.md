@@ -33,5 +33,4 @@
 - MongoDB
 
 ## 🤔 Próximos passos
-- Integração com o back-end
 - Hospedagem
