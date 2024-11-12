@@ -2,7 +2,7 @@
 
 ![Captura FinanceFacilee](https://github.com/Renanjuniior6/FinanceFacilee-front/assets/106713211/b780e199-7dfb-4bbf-93d9-d1f4e03eb721)
 
-- ### É um projeto fullstack que tem como proposta ser um site que permita que o usuário tenha mais controle da sua vida financeira através desse facilitador financeiro
+- ### Projeto fullstack que tem como proposta ser um site que permita que o usuário tenha mais controle da sua vida financeira através desse facilitador financeiro
 
 ## ⭕ Info
 - [API](https://github.com/Renanjuniior6/FinanceFacilee-Back-end)
