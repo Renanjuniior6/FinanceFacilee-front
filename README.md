@@ -5,7 +5,7 @@
 - ### É um projeto fullstack que tem como proposta ser um site que permita que o usuário tenha mais controle da sua vida financeira através desse facilitador financeiro
 
 ## ⭕ Info
-- O projeto ainda não está 100% finalizado, ainda falta a integração com a [API](https://github.com/Renanjuniior6/DevBills-Back-end)
+- [API](https://github.com/Renanjuniior6/FinanceFacilee-Back-end)
 
 ## 🔧 Funcionalidades
 - Criar Transação
@@ -15,6 +15,8 @@
 - Buscar de Saldo por período
 - Evolução financeira no ano
 - Gráficos de demonstração dos dados
+
+## 📲 [Vídeo Demonstração](https://www.linkedin.com/feed/update/urn:li:activity:7220036261569306624/)
 
 ## 🖥 Tecnologias Utilizadas
 - Typescript
