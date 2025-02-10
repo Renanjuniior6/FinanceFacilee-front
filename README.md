@@ -17,6 +17,7 @@
 - Gráficos de demonstração dos dados
 
 ## 📲 [Vídeo Demonstração](https://www.linkedin.com/feed/update/urn:li:activity:7220036261569306624/)
+## 📲 [Link 2 de Demonstração](https://www.youtube.com/watch?v=JeCX5MXvcwY)
 
 ## 🖥 Tecnologias Utilizadas
 - Typescript
